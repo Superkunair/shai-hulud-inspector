@@ -1,0 +1,53 @@
+{
+  "name": "shai-hulud-inspector",
+  "version": "1.0.0",
+  "description": "Security scanner that checks npm dependencies for Shai Hulud vulnerable packages. Scans all dependencies and transitive dependencies against 689+ known compromised packages.",
+  "main": "index.js",
+  "bin": {
+    "shai-hulud-inspector": "./index.js"
+  },
+  "scripts": {
+    "scan": "node index.js",
+    "scan:example": "node index.js .",
+    "test": "node test/test.js",
+    "prepublishOnly": "npm test"
+  },
+  "files": [
+    "index.js",
+    "lib/",
+    "artifacts/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "shai-hulud",
+    "vulnerabilities",
+    "vulnerability-scanner",
+    "scan",
+    "security",
+    "npm",
+    "dependency-scanner",
+    "supply-chain",
+    "npm-audit",
+    "security-tools",
+    "malware",
+    "worm"
+  ],
+  "author": "Jordan Axel Hernandez Mercado",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/shai-hulud-inspector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/shai-hulud-inspector/issues"
+  },
+  "homepage": "https://github.com/yourusername/shai-hulud-inspector#readme",
+  "dependencies": {
+    "semver": "^7.6.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
