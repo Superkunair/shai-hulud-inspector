@@ -18,7 +18,8 @@ function formatResults(results) {
   console.log(`⚠️  Vulnerable packages found: ${results.matchesFound}\n`);
 
   if (results.matchesFound === 0) {
-    console.log('✅ Great! No vulnerable packages detected in your dependencies.\n');
+    console.log('✅ Great! No vulnerable packages detected in your dependencies.');
+    console.log('   Exit code: 0 (Success)\n');
     return;
   }
 
@@ -40,7 +41,8 @@ function formatResults(results) {
 
   console.log('═'.repeat(70));
   console.log('\n🔗 More info: https://www.bleepingcomputer.com/news/security/shai-hulud-worm-spreads-via-1000-npm-packages');
-  console.log('\n⚡ Recommendation: Run "npm audit" and update/remove vulnerable packages.\n');
+  console.log('\n⚡ Recommendation: Run "npm audit" and update/remove vulnerable packages.');
+  console.log('\n❌ Exit code: 1 (Vulnerabilities found)\n');
 }
 
 /**

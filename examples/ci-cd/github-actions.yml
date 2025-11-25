@@ -1,0 +1,130 @@
+# GitHub Actions - Shai Hulud Security Scan
+# File: .github/workflows/security-scan.yml
+#
+# This workflow runs the Shai Hulud scanner on every push and pull request
+# The build will FAIL if vulnerabilities are detected (exit code 1)
+
+name: Shai Hulud Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Scan for Shai Hulud Vulnerabilities
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Shai Hulud Scanner
+        run: npx shai-hulud-inspector@latest
+        # This step will fail (exit 1) if vulnerabilities are found
+      
+      - name: Upload scan results (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-scan-output
+          path: |
+            package-lock.json
+          retention-days: 30
+
+# Advanced example with multiple projects
+---
+name: Multi-Project Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  scan-frontend:
+    name: Scan Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: cd frontend && npm ci
+      - run: cd frontend && npx shai-hulud-inspector@latest
+
+  scan-backend:
+    name: Scan Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: cd backend && npm ci
+      - run: cd backend && npx shai-hulud-inspector@latest
+
+  scan-api:
+    name: Scan API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: cd api && npm ci
+      - run: cd api && npx shai-hulud-inspector@latest
+
+# Example with security gate for deployments
+---
+name: Deploy with Security Gate
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  security-gate:
+    name: Security Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      
+      # Run security scan - blocks deployment if fails
+      - name: Shai Hulud Security Check
+        run: npx shai-hulud-inspector@latest
+      
+      - name: Create security report
+        if: always()
+        run: |
+          echo "Security scan completed at $(date)" >> security-report.txt
+          echo "Status: $?" >> security-report.txt
+  
+  deploy:
+    name: Deploy to Production
+    needs: security-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "Deploying to production..."
+        # Only runs if security-gate passes
+

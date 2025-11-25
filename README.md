@@ -2,6 +2,14 @@
 
 A security scanner that checks your npm dependencies against the Shai Hulud vulnerable packages database. This tool helps identify if your project contains any of the ~1000+ packages compromised in the Shai Hulud supply chain attack.
 
+## Quick Start
+
+```bash
+npx shai-hulud-inspector@latest
+```
+
+That's it! No installation required. The scanner will check your project for vulnerabilities.
+
 ## What is Shai Hulud?
 
 Shai Hulud is a sophisticated worm that spread through over 1,000 npm packages, named after the sandworms from the Dune universe. This attack represents one of the largest supply chain attacks targeting the npm ecosystem.
@@ -43,29 +51,35 @@ npm start
 
 ## Usage
 
-### Scan your current project
+### Quick Start - Run with npx (Recommended) ⚡
 
+**Scan your current project:**
 ```bash
-# Quick scan with npx (recommended - always latest version)
 npx shai-hulud-inspector@latest
-
-# If installed globally
-shai-hulud-inspector
-
-# Or from the cloned project directory
-npm start
 ```
 
-### Scan a specific project
-
+**Scan a specific project:**
 ```bash
-# With npx
 npx shai-hulud-inspector@latest /path/to/your/project
+```
 
-# If installed globally
+**Why use npx @latest?**
+- ✅ No installation required
+- ✅ Always uses the newest version
+- ✅ Latest vulnerability database
+- ✅ Perfect for CI/CD pipelines
+
+### Alternative Methods
+
+**If installed globally:**
+```bash
+shai-hulud-inspector
 shai-hulud-inspector /path/to/your/project
+```
 
-# From cloned project
+**From cloned repository:**
+```bash
+npm start
 npm start -- /path/to/your/project
 ```
 
@@ -111,10 +125,16 @@ npm start -- /path/to/your/project
 
 ## Exit Codes
 
-- `0`: No vulnerabilities found
-- `1`: Vulnerabilities detected or error occurred
+The scanner returns standard exit codes for easy CI/CD integration:
 
-This makes it easy to integrate into CI/CD pipelines:
+- **Exit Code 0**: ✅ No vulnerabilities found (Success)
+- **Exit Code 1**: ❌ Vulnerabilities detected or error occurred (Failure)
+
+The exit code is displayed at the end of each scan for transparency.
+
+### CI/CD Integration
+
+Use the exit code to fail builds when vulnerabilities are detected:
 
 ```bash
 # In your CI pipeline (always use latest version)
@@ -122,7 +142,24 @@ npx shai-hulud-inspector@latest || exit 1
 
 # Or if installed globally
 shai-hulud-inspector || exit 1
+
+# Check exit code explicitly
+npx shai-hulud-inspector@latest
+if [ $? -ne 0 ]; then
+  echo "Build failed due to security vulnerabilities"
+  exit 1
+fi
 ```
+
+**📁 Ready-to-use CI/CD Examples:**
+
+We provide production-ready configuration files for:
+- ✅ GitHub Actions
+- ✅ AWS CodeBuild
+- ✅ Azure Pipelines
+- ✅ Google Cloud Build
+
+**[📖 View CI/CD Examples →](examples/ci-cd/README.md)**
 
 ## Vulnerable Packages Database
 
@@ -180,9 +217,17 @@ Always use multiple security tools and keep your dependencies up to date.
 
 ## Resources
 
+### Documentation
+- [CI/CD Examples](examples/ci-cd/README.md) - Production-ready configs for GitHub Actions, AWS, Azure, GCP
+- [Exit Codes Reference](EXIT_CODES.md) - Complete guide to exit codes and CI/CD integration
 - [Privacy Policy](PRIVACY.md) - Our zero data collection commitment
+- [How It Works](HOW_IT_WORKS.md) - Technical explanation of the matching algorithm
+- [Usage Examples](USAGE_EXAMPLES.md) - Comprehensive usage scenarios
+
+### External Links
 - [Bleeping Computer Article](https://www.bleepingcomputer.com/news/security/shai-hulud-worm-spreads-via-1000-npm-packages)
 - [npm Security Best Practices](https://docs.npmjs.com/security-best-practices)
+
 
 ## License
 

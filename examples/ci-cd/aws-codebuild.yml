@@ -1,0 +1,157 @@
+# AWS CodeBuild - Shai Hulud Security Scan
+# File: buildspec.yml
+#
+# Place this file in the root of your repository
+# The build will FAIL if vulnerabilities are detected (exit code 1)
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+      - npm ci
+  
+  pre_build:
+    commands:
+      - echo "Running Shai Hulud security scan..."
+      - echo "Build started on $(date)"
+      - npx shai-hulud-inspector@latest
+      # Build will FAIL here if vulnerabilities found (exit 1)
+  
+  build:
+    commands:
+      - echo "Security scan passed! Building application..."
+      - npm run build
+  
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
+
+cache:
+  paths:
+    - 'node_modules/**/*'
+
+# Advanced example with multiple projects
+---
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+  
+  pre_build:
+    commands:
+      - echo "Scanning Frontend..."
+      - cd frontend && npm ci && npx shai-hulud-inspector@latest
+      
+      - echo "Scanning Backend..."
+      - cd ../backend && npm ci && npx shai-hulud-inspector@latest
+      
+      - echo "Scanning API..."
+      - cd ../api && npm ci && npx shai-hulud-inspector@latest
+      
+      - cd ..
+  
+  build:
+    commands:
+      - echo "All security scans passed!"
+      - npm run build
+
+# Example with environment-specific scans
+---
+version: 0.2
+
+env:
+  variables:
+    SCAN_PATH: "."
+  
+  parameter-store:
+    SLACK_WEBHOOK: /codebuild/slack-webhook
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm ci
+  
+  pre_build:
+    commands:
+      - echo "Running security scan on $SCAN_PATH"
+      - |
+        if npx shai-hulud-inspector@latest $SCAN_PATH; then
+          echo "✅ Security scan passed"
+        else
+          echo "❌ Security scan failed - vulnerabilities detected!"
+          # Send Slack notification (optional)
+          if [ ! -z "$SLACK_WEBHOOK" ]; then
+            curl -X POST -H 'Content-type: application/json' \
+              --data '{"text":"🚨 Shai Hulud vulnerabilities detected in build!"}' \
+              $SLACK_WEBHOOK
+          fi
+          exit 1
+        fi
+  
+  build:
+    commands:
+      - npm run build
+
+artifacts:
+  files:
+    - '**/*'
+
+# Example with conditional deployment based on branch
+---
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm ci
+  
+  pre_build:
+    commands:
+      - echo "Running Shai Hulud security scan..."
+      - npx shai-hulud-inspector@latest
+      
+      # Get current branch
+      - export BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+      - echo "Current branch is $BRANCH_NAME"
+  
+  build:
+    commands:
+      - npm run build
+  
+  post_build:
+    commands:
+      - |
+        if [ "$BRANCH_NAME" = "main" ]; then
+          echo "Deploying to production (main branch)"
+          aws s3 sync dist/ s3://prod-bucket/
+        elif [ "$BRANCH_NAME" = "develop" ]; then
+          echo "Deploying to staging (develop branch)"
+          aws s3 sync dist/ s3://staging-bucket/
+        else
+          echo "Skipping deployment for feature branch"
+        fi
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
+
+cache:
+  paths:
+    - 'node_modules/**/*'
+

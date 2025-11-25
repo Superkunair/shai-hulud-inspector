@@ -1,0 +1,245 @@
+# Google Cloud Platform - Cloud Build
+# File: cloudbuild.yaml
+#
+# Place this file in the root of your repository
+# The build will FAIL if vulnerabilities are detected (exit code 1)
+
+steps:
+  # Step 1: Install dependencies
+  - name: 'node:18'
+    id: 'install-dependencies'
+    entrypoint: npm
+    args: ['ci']
+  
+  # Step 2: Run Shai Hulud security scan
+  - name: 'node:18'
+    id: 'security-scan'
+    entrypoint: npx
+    args: ['shai-hulud-inspector@latest']
+    # Build FAILS here if vulnerabilities found (exit 1)
+  
+  # Step 3: Build application (only runs if security scan passes)
+  - name: 'node:18'
+    id: 'build-app'
+    entrypoint: npm
+    args: ['run', 'build']
+
+# Build artifacts
+artifacts:
+  objects:
+    location: 'gs://${PROJECT_ID}_cloudbuild/artifacts'
+    paths:
+      - 'dist/**'
+
+# Options
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+# Advanced example with multiple projects
+---
+steps:
+  # Scan Frontend
+  - name: 'node:18'
+    id: 'scan-frontend'
+    dir: 'frontend'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm ci
+        npx shai-hulud-inspector@latest
+  
+  # Scan Backend
+  - name: 'node:18'
+    id: 'scan-backend'
+    dir: 'backend'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm ci
+        npx shai-hulud-inspector@latest
+  
+  # Scan API
+  - name: 'node:18'
+    id: 'scan-api'
+    dir: 'api'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm ci
+        npx shai-hulud-inspector@latest
+  
+  # Build all (only if all scans pass)
+  - name: 'node:18'
+    id: 'build-all'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        echo "All security scans passed!"
+        npm run build:all
+
+# Example with custom error handling and notifications
+---
+steps:
+  - name: 'node:18'
+    id: 'install'
+    entrypoint: npm
+    args: ['ci']
+  
+  - name: 'node:18'
+    id: 'security-scan'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        set +e
+        echo "Running Shai Hulud security scan..."
+        npx shai-hulud-inspector@latest
+        SCAN_EXIT_CODE=$?
+        
+        if [ $SCAN_EXIT_CODE -eq 0 ]; then
+          echo "✅ Security scan passed"
+        else
+          echo "❌ Security scan failed - vulnerabilities detected!"
+          echo "Build will be terminated."
+        fi
+        
+        exit $SCAN_EXIT_CODE
+  
+  - name: 'node:18'
+    id: 'build'
+    entrypoint: npm
+    args: ['run', 'build']
+
+# Send notification on failure
+substitutions:
+  _SLACK_WEBHOOK_URL: '${_SLACK_WEBHOOK}'
+
+options:
+  substitution_option: 'ALLOW_LOOSE'
+
+# Example with environment-specific deployments
+---
+steps:
+  # Security scan
+  - name: 'node:18'
+    id: 'security-scan'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm ci
+        npx shai-hulud-inspector@latest
+  
+  # Build
+  - name: 'node:18'
+    id: 'build'
+    entrypoint: npm
+    args: ['run', 'build']
+  
+  # Deploy to staging (develop branch)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy-staging'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        if [ "$BRANCH_NAME" = "develop" ]; then
+          echo "Deploying to staging..."
+          gcloud app deploy --project=${PROJECT_ID} --version=staging
+        fi
+  
+  # Deploy to production (main branch)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy-production'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        if [ "$BRANCH_NAME" = "main" ]; then
+          echo "Deploying to production..."
+          gcloud app deploy --project=${PROJECT_ID} --version=production
+        fi
+
+substitutions:
+  _ENVIRONMENT: 'development'
+
+# Example with Docker build
+---
+steps:
+  # Security scan before building Docker image
+  - name: 'node:18'
+    id: 'pre-build-scan'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        npm ci
+        echo "Running pre-build security scan..."
+        npx shai-hulud-inspector@latest
+  
+  # Build Docker image only if scan passes
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/${PROJECT_ID}/my-app:${SHORT_SHA}'
+      - '-t'
+      - 'gcr.io/${PROJECT_ID}/my-app:latest'
+      - '.'
+  
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-docker'
+    args:
+      - 'push'
+      - 'gcr.io/${PROJECT_ID}/my-app:${SHORT_SHA}'
+
+images:
+  - 'gcr.io/${PROJECT_ID}/my-app:${SHORT_SHA}'
+  - 'gcr.io/${PROJECT_ID}/my-app:latest'
+
+# Example with parallel scans
+---
+steps:
+  # Install dependencies once
+  - name: 'node:18'
+    id: 'install'
+    entrypoint: npm
+    args: ['ci']
+    waitFor: ['-']
+  
+  # Run security scan (depends on install)
+  - name: 'node:18'
+    id: 'security-scan'
+    entrypoint: npx
+    args: ['shai-hulud-inspector@latest']
+    waitFor: ['install']
+  
+  # Run tests in parallel with security scan
+  - name: 'node:18'
+    id: 'run-tests'
+    entrypoint: npm
+    args: ['test']
+    waitFor: ['install']
+  
+  # Build only after both scan and tests pass
+  - name: 'node:18'
+    id: 'build'
+    entrypoint: npm
+    args: ['run', 'build']
+    waitFor: ['security-scan', 'run-tests']
+
+timeout: '1200s'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  env:
+    - 'NODE_ENV=production'
+
