@@ -130,8 +130,11 @@ npm publish --access public
 # Check on npm
 npm view shai-hulud-inspector
 
-# Test installation
-npx shai-hulud-inspector@latest --help
+# Test with npx (most common usage)
+npx shai-hulud-inspector@latest
+
+# Verify it scans properly
+npx shai-hulud-inspector@latest .
 ```
 
 ## Using the Published Package

@@ -35,7 +35,10 @@ npx shai-hulud-inspector
 ## ✅ That's it! Now anyone can use:
 
 ```bash
-# Run without installing
+# Run without installing (recommended - always gets latest)
+npx shai-hulud-inspector@latest
+
+# Or without @latest (caches version)
 npx shai-hulud-inspector
 
 # Or install globally
@@ -80,8 +83,10 @@ The `files` field in package.json controls what's included:
 - ✅ All dependencies specified
 - ✅ Tests included
 - ✅ LICENSE file added
+- ✅ PRIVACY.md included (zero data collection policy)
 - ✅ .npmignore configured
 - ✅ Keywords for discoverability
+- ✅ Privacy notice in CLI output
 
 **You're ready to publish!** 🎉
 

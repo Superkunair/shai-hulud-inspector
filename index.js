@@ -10,6 +10,7 @@ const path = require('path');
 function formatResults(results) {
   console.log('\n╔═══════════════════════════════════════════════════════════════╗');
   console.log('║         SHAI HULUD VULNERABILITY SCANNER                      ║');
+  console.log('║         🔒 100% Private - Zero Data Collection                ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
   console.log(`📦 Total packages scanned: ${results.totalPackagesScanned}`);

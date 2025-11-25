@@ -14,10 +14,19 @@ Shai Hulud is a sophisticated worm that spread through over 1,000 npm packages, 
 - 📝 Clear, actionable reporting
 - ⚡ Fast and lightweight
 - 🔒 Works offline (no external API calls)
+- 🛡️ **100% Private - Zero data collection, zero telemetry, zero metrics**
 
 ## Installation
 
-### Install globally (recommended)
+### Quick Start - No Installation Required! ⚡
+
+Run instantly with npx (always uses latest version):
+
+```bash
+npx shai-hulud-inspector@latest
+```
+
+### Install Globally (Optional)
 
 ```bash
 npm install -g shai-hulud-inspector
@@ -26,9 +35,10 @@ npm install -g shai-hulud-inspector
 ### Or clone and use locally
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Superkunair/shai-hulud-inspector.git
 cd shai-hulud-inspector
 npm install
+npm start
 ```
 
 ## Usage
@@ -36,20 +46,27 @@ npm install
 ### Scan your current project
 
 ```bash
+# Quick scan with npx (recommended - always latest version)
+npx shai-hulud-inspector@latest
+
 # If installed globally
 shai-hulud-inspector
 
-# Or from the project directory
-npm run scan
+# Or from the cloned project directory
+npm start
 ```
 
 ### Scan a specific project
 
 ```bash
+# With npx
+npx shai-hulud-inspector@latest /path/to/your/project
+
+# If installed globally
 shai-hulud-inspector /path/to/your/project
 
-# Or
-node index.js /path/to/your/project
+# From cloned project
+npm start -- /path/to/your/project
 ```
 
 ### Example Output
@@ -100,7 +117,10 @@ node index.js /path/to/your/project
 This makes it easy to integrate into CI/CD pipelines:
 
 ```bash
-# In your CI pipeline
+# In your CI pipeline (always use latest version)
+npx shai-hulud-inspector@latest || exit 1
+
+# Or if installed globally
 shai-hulud-inspector || exit 1
 ```
 
@@ -137,9 +157,21 @@ Found a vulnerable package not in the database? Please open an issue or submit a
 - Only checks exact version matches
 - Does not scan `yarn.lock` or `pnpm-lock.yaml` (yet)
 
-## Security Notes
+## Privacy & Security Notes
 
-⚠️ **Important**: This tool checks against a specific list of known vulnerable packages from the Shai Hulud attack. It does NOT:
+### 🔒 Privacy First
+
+**This tool respects your privacy:**
+- ✅ **No data collection** - We don't collect any information about your projects
+- ✅ **No telemetry** - No usage statistics or analytics
+- ✅ **No metrics** - No tracking of any kind
+- ✅ **Completely offline** - All scanning happens locally on your machine
+- ✅ **No external API calls** - Your code and dependencies stay private
+- ✅ **Open source** - Audit the code yourself at [GitHub](https://github.com/Superkunair/shai-hulud-inspector)
+
+### ⚠️ Security Scope
+
+**Important**: This tool checks against a specific list of known vulnerable packages from the Shai Hulud attack. It does NOT:
 - Replace comprehensive security tools like `npm audit`
 - Check for other types of vulnerabilities
 - Provide vulnerability fixes
@@ -148,6 +180,7 @@ Always use multiple security tools and keep your dependencies up to date.
 
 ## Resources
 
+- [Privacy Policy](PRIVACY.md) - Our zero data collection commitment
 - [Bleeping Computer Article](https://www.bleepingcomputer.com/news/security/shai-hulud-worm-spreads-via-1000-npm-packages)
 - [npm Security Best Practices](https://docs.npmjs.com/security-best-practices)
 

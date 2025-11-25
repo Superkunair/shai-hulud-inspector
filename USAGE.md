@@ -2,24 +2,31 @@
 
 ## Quick Start
 
-### 1. Install Dependencies
+### No Installation Required! ⚡
+
+The fastest way to use the scanner is with npx:
 
 ```bash
+# Scan current directory (always uses latest version)
+npx shai-hulud-inspector@latest
+
+# Scan specific project
+npx shai-hulud-inspector@latest /path/to/project
+```
+
+### Local Development
+
+If you cloned the repository:
+
+```bash
+# 1. Install Dependencies
 npm install
-```
 
-### 2. Run the Scanner
+# 2. Run the Scanner
+npm start
 
-Scan your current project:
-
-```bash
-npm run scan
-```
-
-Or scan any other project:
-
-```bash
-node index.js /path/to/project
+# Or scan a specific project
+npm start -- /path/to/project
 ```
 
 ## Examples
@@ -99,10 +106,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
-      - name: Install scanner
-        run: npm install -g shai-hulud-inspector
-      - name: Run scan
-        run: shai-hulud-inspector
+      - name: Install dependencies
+        run: npm install
+      - name: Run Shai Hulud scan
+        run: npx shai-hulud-inspector@latest
 ```
 
 ### GitLab CI
@@ -111,8 +118,8 @@ jobs:
 security_scan:
   stage: test
   script:
-    - npm install -g shai-hulud-inspector
-    - shai-hulud-inspector
+    - npm install
+    - npx shai-hulud-inspector@latest
   allow_failure: false
 ```
 
@@ -121,8 +128,8 @@ security_scan:
 ```groovy
 stage('Security Scan') {
     steps {
-        sh 'npm install -g shai-hulud-inspector'
-        sh 'shai-hulud-inspector'
+        sh 'npm install'
+        sh 'npx shai-hulud-inspector@latest'
     }
 }
 ```
@@ -194,6 +201,19 @@ The scanner only checks against known vulnerable packages in the database. Alway
 - Snyk
 - Dependabot
 
+## Privacy & Data Collection
+
+**🔒 This tool collects ZERO data:**
+- ❌ No usage statistics
+- ❌ No telemetry
+- ❌ No metrics
+- ❌ No analytics
+- ❌ No tracking of any kind
+
+Everything runs **100% offline** on your machine. Your projects and dependencies stay completely private.
+
+Read more: [PRIVACY.md](PRIVACY.md)
+
 ## FAQ
 
 **Q: Does this replace npm audit?**
@@ -207,4 +227,7 @@ A: Not yet, but support is planned for future versions.
 
 **Q: What if I have a vulnerable package as a transitive dependency?**
 A: The scanner checks ALL dependencies including transitive ones. You'll need to either update the parent package or use npm overrides.
+
+**Q: Do you collect any data about my scans?**
+A: Absolutely not. Zero data collection, zero telemetry, zero metrics. Everything happens locally on your machine.
 
