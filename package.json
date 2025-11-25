@@ -1,6 +1,6 @@
 {
   "name": "shai-hulud-inspector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Security scanner that checks npm dependencies for Shai Hulud vulnerable packages. Scans all dependencies and transitive dependencies against 689+ known compromised packages.",
   "main": "index.js",
   "bin": {
@@ -37,12 +37,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/shai-hulud-inspector.git"
+    "url": "https://github.com/Superkunair/shai-hulud-inspector.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/shai-hulud-inspector/issues"
+    "url": "https://github.com/Superkunair/shai-hulud-inspector/issues"
   },
-  "homepage": "https://github.com/yourusername/shai-hulud-inspector#readme",
+  "homepage": "https://github.com/Superkunair/shai-hulud-inspector#readme",
   "dependencies": {
     "semver": "^7.6.0"
   },
