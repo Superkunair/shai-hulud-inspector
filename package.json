@@ -1,6 +1,6 @@
 {
   "name": "shai-hulud-inspector",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Security scanner that checks npm dependencies for Shai Hulud vulnerable packages. 100% offline, zero data collection, zero telemetry. Scans all dependencies against 689+ known compromised packages.",
   "main": "index.js",
   "bin": {
@@ -11,7 +11,8 @@
     "scan": "node index.js",
     "scan:example": "node index.js .",
     "test": "node test/test.js",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "merge-packages": "node utils/merge-packages.js"
   },
   "files": [
     "index.js",
