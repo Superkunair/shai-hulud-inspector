@@ -157,11 +157,11 @@
   },
   {
     "Package": "@asyncapi/cli",
-    "Version": "= 4.1.2"
+    "Version": "= 4.1.2 || = 4.1.3"
   },
   {
     "Package": "@asyncapi/converter",
-    "Version": "= 1.6.3"
+    "Version": "= 1.6.3 || = 1.6.4"
   },
   {
     "Package": "@asyncapi/diff",
@@ -177,11 +177,11 @@
   },
   {
     "Package": "@asyncapi/generator",
-    "Version": "= 2.8.5"
+    "Version": "= 2.8.5 || = 2.8.6"
   },
   {
     "Package": "@asyncapi/generator-components",
-    "Version": "= 0.3.2"
+    "Version": "= 0.3.2 || = 0.3.3"
   },
   {
     "Package": "@asyncapi/generator-helpers",
@@ -233,7 +233,7 @@
   },
   {
     "Package": "@asyncapi/nodejs-template",
-    "Version": "= 3.0.5"
+    "Version": "= 3.0.5 || = 3.0.6"
   },
   {
     "Package": "@asyncapi/nodejs-ws-template",
@@ -245,7 +245,7 @@
   },
   {
     "Package": "@asyncapi/openapi-schema-parser",
-    "Version": "= 3.0.25"
+    "Version": "= 3.0.25 || = 3.0.26"
   },
   {
     "Package": "@asyncapi/optimizer",
@@ -265,7 +265,7 @@
   },
   {
     "Package": "@asyncapi/protobuf-schema-parser",
-    "Version": "= 3.5.3 || = 3.6.1"
+    "Version": "= 3.5.2 || = 3.5.3 || = 3.6.1"
   },
   {
     "Package": "@asyncapi/python-paho-template",
@@ -273,7 +273,7 @@
   },
   {
     "Package": "@asyncapi/react-component",
-    "Version": "= 2.6.6"
+    "Version": "= 2.6.6 || = 2.6.7"
   },
   {
     "Package": "@asyncapi/server-api",
@@ -769,7 +769,7 @@
   },
   {
     "Package": "@mcp-use/cli",
-    "Version": "= 2.2.6"
+    "Version": "= 2.2.6 || = 2.2.7"
   },
   {
     "Package": "@mcp-use/inspector",
@@ -777,7 +777,7 @@
   },
   {
     "Package": "@mcp-use/mcp-use",
-    "Version": "= 1.0.1"
+    "Version": "= 1.0.1 || = 1.0.2"
   },
   {
     "Package": "@micado-digital/stadtmarketing-kufstein-external",
@@ -1257,11 +1257,11 @@
   },
   {
     "Package": "@postman/final-node-keytar",
-    "Version": "= 7.9.1 || = 7.9.2"
+    "Version": "= 7.9.1 || = 7.9.2 || = 7.9.3"
   },
   {
     "Package": "@postman/mcp-ui-client",
-    "Version": "= 5.5.1 || = 5.5.2"
+    "Version": "= 5.5.1 || = 5.5.2 || = 5.5.3"
   },
   {
     "Package": "@postman/node-keytar",
@@ -1281,7 +1281,7 @@
   },
   {
     "Package": "@postman/pm-bin-windows-x64",
-    "Version": "= 1.24.4 || = 1.24.5"
+    "Version": "= 1.24.3 || = 1.24.4 || = 1.24.5"
   },
   {
     "Package": "@postman/postman-collection-fork",
@@ -1289,11 +1289,11 @@
   },
   {
     "Package": "@postman/postman-mcp-cli",
-    "Version": "= 1.0.4 || = 1.0.5"
+    "Version": "= 1.0.3 || = 1.0.4 || = 1.0.5"
   },
   {
     "Package": "@postman/postman-mcp-server",
-    "Version": "= 2.4.10 || = 2.4.11"
+    "Version": "= 2.4.10 || = 2.4.11 || = 2.4.12"
   },
   {
     "Package": "@postman/pretty-ms",
@@ -1309,11 +1309,11 @@
   },
   {
     "Package": "@postman/wdio-allure-reporter",
-    "Version": "= 0.0.9"
+    "Version": "= 0.0.7 || = 0.0.9"
   },
   {
     "Package": "@postman/wdio-junit-reporter",
-    "Version": "= 0.0.4 || = 0.0.6"
+    "Version": "= 0.0.4 || = 0.0.5 || = 0.0.6"
   },
   {
     "Package": "@pradhumngautam/common-app",
@@ -1861,7 +1861,7 @@
   },
   {
     "Package": "@zapier/ai-actions-react",
-    "Version": "= 0.1.13 || = 0.1.14"
+    "Version": "= 0.1.12 || = 0.1.13 || = 0.1.14"
   },
   {
     "Package": "@zapier/babel-preset-zapier",
@@ -1877,7 +1877,7 @@
   },
   {
     "Package": "@zapier/mcp-integration",
-    "Version": "= 3.0.1 || = 3.0.3"
+    "Version": "= 3.0.1 || = 3.0.2 || = 3.0.3"
   },
   {
     "Package": "@zapier/secret-scrubber",
@@ -1889,11 +1889,11 @@
   },
   {
     "Package": "@zapier/stubtree",
-    "Version": "= 0.1.3"
+    "Version": "= 0.1.2 || = 0.1.3 || = 0.1.4"
   },
   {
     "Package": "@zapier/zapier-sdk",
-    "Version": "= 0.15.5 || = 0.15.7"
+    "Version": "= 0.15.5 || = 0.15.6 || = 0.15.7"
   },
   {
     "Package": "02-echo",
@@ -3125,7 +3125,7 @@
   },
   {
     "Package": "wallet-evm",
-    "Version": "= 0.3.1"
+    "Version": "= 0.3.1 || = 0.3.2"
   },
   {
     "Package": "wallet-type",
@@ -3169,7 +3169,7 @@
   },
   {
     "Package": "zapier-platform-legacy-scripting-runner",
-    "Version": "= 4.0.3 || = 4.0.4"
+    "Version": "= 4.0.2 || = 4.0.3 || = 4.0.4"
   },
   {
     "Package": "zapier-platform-schema",
