@@ -17,8 +17,9 @@ Shai Hulud is a sophisticated worm that spread through over 1,000 npm packages, 
 ## Features
 
 - 🔍 Scans all dependencies and transitive dependencies
-- 📊 Checks against a database of 690+ known vulnerable packages
+- 📊 Checks against a database of 798+ known vulnerable packages
 - 🎯 Identifies exact version matches
+- 📋 **Smart Fallback** - Works with package-lock.json OR package.json
 - 📝 Clear, actionable reporting
 - ⚡ Fast and lightweight
 - 🔒 Works offline (no external API calls)
@@ -82,6 +83,24 @@ shai-hulud-inspector /path/to/your/project
 npm start
 npm start -- /path/to/your/project
 ```
+
+### 📋 Dependency Scanning Modes
+
+The scanner operates in two modes depending on what files it finds:
+
+| Mode | File | Scans | Protection Level |
+|------|------|-------|------------------|
+| **Complete** ✅ | `package-lock.json` | Direct + Transitive dependencies | **Full Protection** |
+| **Limited** ⚠️ | `package.json` only | Direct dependencies only | **Partial Protection** |
+
+**⚠️ IMPORTANT:** Without `package-lock.json`, transitive dependencies (dependencies of your dependencies) are NOT scanned. This means hidden malicious packages could be missed!
+
+**To generate package-lock.json:**
+```bash
+npm install
+```
+
+👉 **Learn more:** See [TRANSITIVE_DEPENDENCIES.md](TRANSITIVE_DEPENDENCIES.md) for why this matters
 
 ### Example Output
 
@@ -219,6 +238,7 @@ Always use multiple security tools and keep your dependencies up to date.
 
 ### Documentation
 - [CI/CD Examples](examples/ci-cd/README.md) - Production-ready configs for GitHub Actions, AWS, Azure, GCP
+- [Transitive Dependencies](TRANSITIVE_DEPENDENCIES.md) - **Why package-lock.json matters for security**
 - [Exit Codes Reference](EXIT_CODES.md) - Complete guide to exit codes and CI/CD integration
 - [Privacy Policy](PRIVACY.md) - Our zero data collection commitment
 - [How It Works](HOW_IT_WORKS.md) - Technical explanation of the matching algorithm
