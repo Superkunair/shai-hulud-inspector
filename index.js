@@ -13,12 +13,20 @@ function formatResults(results) {
   console.log('║         🔒 100% Private - Zero Data Collection                ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
-  console.log(`📦 Total packages scanned: ${results.totalPackagesScanned}`);
+  const scanTypeLabel = results.isLockFile ? '(including transitive)' : '(direct only)';
+  console.log(`📦 Total packages scanned: ${results.totalPackagesScanned} ${scanTypeLabel}`);
   console.log(`🔍 Known vulnerable packages in database: ${results.totalVulnerablePackages}`);
   console.log(`⚠️  Vulnerable packages found: ${results.matchesFound}\n`);
 
   if (results.matchesFound === 0) {
     console.log('✅ Great! No vulnerable packages detected in your dependencies.');
+    
+    if (!results.isLockFile) {
+      console.log('\n⚠️  NOTE: Only DIRECT dependencies were scanned');
+      console.log('   For complete protection, generate package-lock.json:');
+      console.log('   $ npm install\n');
+    }
+    
     console.log('   Exit code: 0 (Success)\n');
     return;
   }
@@ -56,10 +64,21 @@ function main() {
 
   try {
     // Extract all dependencies
-    const dependencies = extractDependencies(projectPath);
+    const scanResult = extractDependencies(projectPath);
+    
+    // Display warnings if any (e.g., no package-lock.json)
+    if (scanResult.warnings && scanResult.warnings.length > 0) {
+      console.log('⚠️  WARNINGS:\n');
+      scanResult.warnings.forEach(warning => console.log(warning));
+      console.log('');
+    }
     
     // Scan for vulnerabilities
-    const results = scanForVulnerabilities(dependencies);
+    const results = scanForVulnerabilities(scanResult.dependencies);
+    
+    // Add scan metadata to results
+    results.isLockFile = scanResult.isLockFile;
+    results.hasWarnings = scanResult.warnings && scanResult.warnings.length > 0;
     
     // Format and display results
     formatResults(results);
